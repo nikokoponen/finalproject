@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"
+	th:href="@{css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" href="/css/layout.css"
+	th:href="@{css/layout.css}" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="myScripts/nikoScripts.js"></script>
+<title>Project members</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<div class="navigation">
+		<ul class="nav nav-pills nav-stacked">
+			<li><a th:href="@{/companies}">Company</a></li>
+			<li><a th:href="@{/departments}">Departments</a></li>
+			<li><a th:href="@{/employees}">Employees</a></li>
+			<li class="active"><a th:href="@{/projectmembers}">Project
+					members</a></li>
+			<li><a th:href="@{/projects}">Projects</a></li>
+			<li><a th:href="@{/workhours}">Workhours</a></li>
+		</ul>
+		<div id="logoutbtn" class="col-md-4" style="padding: 20px 0">
+			<form th:action="@{/logout}" method="post">
+				<input type="submit" value="Sign Out" class="btn btn-danger" />
+			</form>
+		</div>
+	</div>
+	<div class="content">
+		<h1>Project members</h1>
+		<table class="table table-striped">
+			<tr>
+				<th>Employee</th>
+				<th>Project</th>
+				<th></th>
+				<th sec:authorize="hasAuthority('ADMIN')"></th>
+			</tr>
+			<tr th:each="pmember : ${pmembers}">
+				<td
+					th:text="${pmember.employee.firstName+' '+pmember.employee.lastName}"></td>
+				<td th:text="${pmember.project.name}"></td>
+				<td><a th:href="@{/editpmember/{id}(id=${pmember.id})}"
+					class="btn btn-success">Edit</a></td>
+				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delpmember/{id}(id=${pmember.id})}"
+					class="btn btn-danger">Delete</a></td>
+			</tr>
+		</table>
+		<div sec:authorize="hasAuthority('ADMIN')" id="pmembercreate" class="btn btn-success">Add employee to
+			project</div>
+		<div sec:authorize="hasAuthority('ADMIN')" id="pmemberdetails">
+			<h2>Details</h2>
+			<div>
+				<form th:object="${newpmember}" th:action="@{/pmemberadd}"
+					action="#" method="post">
+					<div class="form-group">
+						<label for="employees">Select Employee</label> <select
+							id="employees" th:field="*{employee}" class="form-control">
+							<option th:each="employee: ${employees}"
+								th:value="${employee.id}"
+								th:text="${employee.firstName+' '+employee.lastName}"></option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="projects">Select Project</label> <select id="projects"
+							th:field="*{project}" class="form-control">
+							<option th:each="project: ${projects}" th:value="${project.id}"
+								th:text="${project.name}"></option>
+						</select>
+					</div>
+					<input type="hidden" name="company"
+						th:value="${employee.company.id}" /> <input type="submit"
+						value="Create" class="btn btn-success"></input>
+					<button id="cancel" type="button" class="btn btn-danger">Cancel</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

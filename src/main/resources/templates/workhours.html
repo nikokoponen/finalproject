@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"
+	th:href="@{css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" href="/css/layout.css"
+	th:href="@{css/layout.css}" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="myScripts/nikoScripts.js"></script>
+<title>Workhours</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<div class="navigation">
+		<ul class="nav nav-pills nav-stacked">
+			<li><a th:href="@{/companies}">Company</a></li>
+			<li><a th:href="@{/departments}">Departments</a></li>
+			<li><a th:href="@{/employees}">Employees</a></li>
+			<li><a th:href="@{/projectmembers}">Project members</a></li>
+			<li><a th:href="@{/projects}">Projects</a></li>
+			<li class="active"><a th:href="@{/workhours}">Workhours</a></li>
+		</ul>
+		<div id="logoutbtn" class="col-md-4" style="padding: 20px 0">
+			<form th:action="@{/logout}" method="post">
+				<input type="submit" value="Sign Out" class="btn btn-danger" />
+			</form>
+		</div>
+	</div>
+	<div class="content">
+		<h1>Workhours</h1>
+		<table class="table table-striped">
+			<tr>
+				<th>Company</th>
+				<th>Project</th>
+				<th>Employee</th>
+				<th>Task</th>
+				<th>Date</th>
+				<th>Hours</th>
+				<th></th>
+				<th></th>
+			</tr>
+			<tr th:each="workhour : ${workhours}">
+				<td th:text="${workhour.company.name}"></td>
+				<td th:text="${workhour.project.name}"></td>
+				<td
+					th:text="${workhour.employee.firstName+' '+workhour.employee.lastName}"></td>
+				<td th:text="${workhour.task}"></td>
+				<td th:text="${workhour.date}"></td>
+				<td th:text="${workhour.hours}"></td>
+				<td><a th:href="@{/editpwh/{id}(id=${workhour.id})}"
+					class="btn btn-success">Edit</a></td>
+				<td><a th:href="@{/delpwh/{id}(id=${workhour.id})}"
+					class="btn btn-danger">Delete</a></td>
+			</tr>
+		</table>
+		<div id="pwhcreate" class="btn btn-success">Create more hours</div>
+		<div id="pwhdetails">
+			<h2>Details</h2>
+			<div>
+				<form th:object="${newpwh}" th:action="@{/pwhadd}" action="#"
+					method="post">
+					<div class="form-group">
+						<label for="task">Task</label> <input type="text"
+							class="form-control" id="task" th:field="*{task}" />
+					</div>
+					<div class="form-group">
+						<label for="date">Date</label> <input type="text"
+							class="form-control" id="date" th:field="*{date}" />
+					</div>
+					<div class="form-group">
+						<label for="hours">Hours</label> <input type="text"
+							class="form-control" id="hours" th:field="*{hours}" />
+					</div>
+					<div class="form-group">
+						<label for="projects">Select Project</label> <select id="projects"
+							th:field="*{project}" class="form-control">
+							<option th:each="project: ${projects}" th:value="${project.id}"
+								th:text="${project.name}"></option>
+						</select>
+					</div>
+					<input type="hidden" id="compid" th:object="${currpwh}"
+						th:field="*{company.id}" /> <input type="hidden" id="empid"
+						th:object="${currpwh}" th:field="*{employee.id}" /><input
+						type="submit" value="Create" class="btn btn-success"></input>
+					<button id="cancel" type="button" class="btn btn-danger"
+						onclick="this.form.reset();">Cancel</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"
+	th:href="@{css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" href="/css/layout.css"
+	th:href="@{css/layout.css}" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="myScripts/nikoScripts.js"></script>
+<script src="myScripts/nikoScripts1.js"></script>
+<title>Projects</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<div class="navigation">
+		<ul class="nav nav-pills nav-stacked">
+			<li><a th:href="@{/companies}">Company</a></li>
+			<li><a th:href="@{/departments}">Departments</a></li>
+			<li><a th:href="@{/employees}">Employees</a></li>
+			<li><a th:href="@{/projectmembers}">Project members</a></li>
+			<li class="active"><a th:href="@{/projects}">Projects</a></li>
+			<li><a th:href="@{/workhours}">Workhours</a></li>
+		</ul>
+		<div id="logoutbtn" class="col-md-4" style="padding: 20px 0">
+			<form th:action="@{/logout}" method="post">
+				<input type="submit" value="Sign Out" class="btn btn-danger" />
+			</form>
+		</div>
+	</div>
+	<div class="content">
+		<h1>Projects</h1>
+		<table class="table table-striped">
+			<tr>
+				<th>Name</th>
+				<th>Start date</th>
+				<th>End date</th>
+				<th sec:authorize="hasAuthority('ADMIN')"></th>
+				<th sec:authorize="hasAuthority('ADMIN')"></th>
+			</tr>
+			<tr th:each="project : ${projects}">
+				<td th:text="${project.name}"></td>
+				<td th:text="${project.startDate}"></td>
+				<td th:text="${project.endDate}"></td>
+				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/editproject/{id}(id=${project.id})}"
+					class="btn btn-success">Edit</a></td>
+				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delproject/{id}(id=${project.id})}"
+					class="btn btn-danger">Delete</a></td>
+			</tr>
+		</table>
+		<div sec:authorize="hasAuthority('ADMIN')" id="projectcreate" class="btn btn-success">Create a new
+			project</div>
+		<div sec:authorize="hasAuthority('ADMIN')" id="projectdetails">
+			<h2>Project Details</h2>
+			<div>
+				<form id="projectform" th:object="${newproject}"
+					th:action="@{/projectadd}" action="#" method="post">
+					<div class="form-group">
+						<label for="name">Name</label> <input type="text"
+							class="form-control" id="name" th:field="*{name}" />
+					</div>
+					<div class="form-group">
+						<label for="startDate">Start date</label> <input type="text"
+							class="form-control" id="startDate" th:field="*{startDate}" />
+					</div>
+					<div class="form-group">
+						<label for="endDate">End date</label> <input type="text"
+							class="form-control" id="endDate" th:field="*{endDate}" />
+					</div>
+					<input type="hidden" name="company" th:value="${companyId}" /> <input
+						type="submit" value="Create" class="btn btn-success"></input>
+					<button id="cancel" type="button" class="btn btn-danger"
+						onclick="this.form.reset();">Cancel</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

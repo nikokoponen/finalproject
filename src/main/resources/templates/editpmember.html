@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- Locally hosted bootstrap does not function in edit pages,why? Had to use CDN hosted libraries. This only occurs on edit pages -->
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+<!-- jQuery library -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="myScripts/nikoScripts.js"></script>
+<title>Project member</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<div class="col-md-4" style="padding: 20px 0">
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Sign Out" class="btn btn-danger" />
+		</form>
+	</div>
+	<h1>Project member details</h1>
+	<table class="table table-striped">
+		<tr>
+			<th>Employee</th>
+			<th>Company</th>
+		</tr>
+		<tr th:object="${pmember}">
+			<td th:text="*{employee.firstName+' '+employee.lastName}"></td>
+			<td th:text="*{company.name}"></td>
+		</tr>
+	</table>
+	<form th:object="${pmember}" th:action="@{/pmembersave}" action="#"
+		method="post">
+		<div class="form-group">
+			<label for="projects">Select Project</label> <select id="projects"
+				th:field="*{project}" class="form-control">
+				<option th:each="project: ${projects}" th:value="${project.id}"
+					th:text="${project.name}"></option>
+			</select>
+		</div>
+		<input type="hidden" id="id" th:field="*{id}" /> <input type="hidden"
+			id="employee" th:field="*{employee.id}" /> <input type="hidden"
+			id="company" th:field="*{company.id}" /> <input type="submit"
+			value="Save" class="btn btn-success"></input>
+	</form>
+	<a th:href="@{/projectmembers}" class="btn btn-default">Back to Projectmembers</a>
+</body>
+</html>

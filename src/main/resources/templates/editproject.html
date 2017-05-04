@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- Locally hosted bootstrap does not function in edit pages,why? Had to use CDN hosted libraries. This only occurs on edit pages -->
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+<!-- jQuery library -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="myScripts/nikoScripts.js"></script>
+<title>Project</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<div class="col-md-4" style="padding: 20px 0">
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Sign Out" class="btn btn-danger" />
+		</form>
+	</div>
+	<h1>Project Details</h1>
+	<form th:object="${project}" th:action="@{/projectsave}" action="#"
+		method="post">
+		<div class="form-group">
+			<label for="name">Name</label> <input type="text"
+				class="form-control" id="name" th:field="*{name}" />
+		</div>
+		<div class="form-group">
+			<label for="startDate">Start date</label> <input type="text"
+				class="form-control" id="startDate" th:field="*{startDate}"
+				readonly="readonly" />
+		</div>
+		<div class="form-group">
+			<label for="endDate">End date</label> <input type="text"
+				class="form-control" id="endDate" th:field="*{endDate}" />
+		</div>
+		<input type="hidden" id="id" th:field="*{id}" /> <input type="hidden"
+			id="companyid" th:field="*{company.id}" /> <input type="submit"
+			value="Save" class="btn btn-success"></input>
+	</form>
+	<a th:href="@{/projects}" class="btn btn-default">Back to Projects</a>
+</body>
+</html>
